@@ -71,5 +71,15 @@ $RECYCLE.BIN/
 *.msm
 *.msp
 
-# Windows shortcuts
-*.lnk
+# Visual Studio
+*.suo
+*.sdf
+*.xaml
+*.ipch
+Debug/
+Release/
+
+# Vim
+*.*~
+*.swp
+*.swo
