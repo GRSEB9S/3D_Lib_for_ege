@@ -19,4 +19,6 @@
 #define EPSINON 0.0000000000000001
 #define DOUBLE_EQ( x, y ) (((x) - (y) >= -EPSINON) && ((x) - (y) <= EPSINON))
 
+#define RAY_RECURSIVE 3
+
 #endif

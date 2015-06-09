@@ -251,17 +251,44 @@ void main_loop_2() {
 	}
 }
 
+void main_loop_3() {
+	X3Dlib::Scene s;
+	X3Dlib::Surface sf(1, 1, 1, 0, 0, 0, 0, 0, 0, -4);
+	sf.ka = { 0.3, 0.3, 0.3 };
+	sf.kd = { 1, 1, 1 };
+	sf.kh = { 0.0, 0.0, 0.0 };
+	X3Dlib::Pointolite pl1(X3Dlib::Illuminate(1.0, 0, 0), { -5, 5, 0, 1 });
+	X3Dlib::Pointolite pl2(X3Dlib::Illuminate(0, 1.0, 0), { 5, 5, 0, 1 });
+	X3Dlib::Pointolite pl3(X3Dlib::Illuminate(0, 0, 1.0), { -5, -5, 0, 1 });
+
+	s.add_surface(&sf);
+	s.add_pointolit(pl1);
+	s.add_pointolit(pl2);
+	/*
+	s.add_pointolit(pl3);
+	*/
+	s.set_ambient(X3Dlib::Ambient(X3Dlib::Illuminate(0.3, 0.3, 0.3)));
+	s.set_camera(X3Dlib::Camera({ 0, 0, -5, 1 }, { 0, 0, 1, 0 }, { 0, 1, 0, 0 }));
+
+	for (; is_run(); delay_fps(60), cleardevice()) {
+		s.ray_tracing(screen_width, screen_height, [](double x, double y, X3Dlib::Illuminate i) {
+			int r = i.r() * 255, g = i.g() * 255, b = i.b() * 255;
+			putpixel(x, y, EGERGBA(r, g, b, 255));
+		});
+		int i = 0;
+	}
+}
+
 int WinMain() {
 	setinitmode(INIT_ANIMATION);
 	initgraph(screen_width, screen_height);
 	ege_enable_aa(true);
 	setbkcolor(WHITE);
-	setcolor(EGERGBA(0, 0, 0, 255));
 
 	randomize();
 	setrendermode(RENDER_MANUAL);
 
-	main_loop_2();
+	main_loop_3();
 
 	closegraph();
 	return 0;

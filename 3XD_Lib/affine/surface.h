@@ -61,8 +61,12 @@ namespace X3Dlib {
 		typedef _affine_vector		_Tv4;
 		typedef _line				_Tline;
 	public :
-		virtual _Tdot p(const _Tline& l) const override = 0;
-		virtual _Tv4 n(const _Tline& l) const override = 0;
+		virtual _Tdot p(const _Tline& l) const {
+			throw "";
+		};
+		virtual _Tv4 n(const _Tline& l) const {
+			throw "";
+		};
 	};
 
 	class _quadric_surface
@@ -116,7 +120,7 @@ namespace X3Dlib {
 			return *this;
 		}
 
-		_Tdot p(const _Tline& l) const override {
+		virtual _Tdot p(const _Tline& l) const {
 			_Titem a = _n(l.v.down()), b = l.v.down() PRO_DOT _nabla(l.p.down()), c = _f(l.p);
 			_Titem t = pow(b, 2) - 4 * a * c;
 
@@ -130,9 +134,8 @@ namespace X3Dlib {
 			}
 		}
 
-		_Tv4 n(const _Tline& l) const override {
-			_Tv4 t = _Tv4::normalize(_Tv4::up(_nabla(l.v.down())));
-			if (t.angle(l.v * -1) > PI / 2) t = t * -1;
+		virtual _Tv4 n(const _Tline& l) const {
+			_Tv4 t = _Tv4::normalize(_Tv4::up(_nabla(l.v.down() * -1)));
 			return t;
 		}
 	};

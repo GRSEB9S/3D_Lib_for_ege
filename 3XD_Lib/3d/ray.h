@@ -32,27 +32,27 @@ namespace X3Dlib {
 			v.normalize();
 			normalize();
 		}
-		_Tself(const _Tself& src) : _Tbl(src.p, src.v), _Tbi(src.r, src.g, src.b) {
+		_Tself(const _Tself& src) : _Tbl(src.p, src.v), _Tbi(src._r, src._g, src._b) {
 			p.normalize();
 			v.normalize();
 			normalize();
 		}
 
 		_Tself& operator = (const _Tself& src) {
-			r = src.r; g = src.g; b = src.b;
+			_r = src._r; _g = src._g; _b = src._b;
 			p = src.p; v = src.v;
 		}
 
 		bool operator == (const _Tself& src) {
 			return
-				r == src.r &&
-				g == src.g &&
-				b == src.b &&
+				_r == src._r &&
+				_g == src._g &&
+				_b == src._b &&
 				p == src.p &&
 				v == src.v;
 		}
 
-		_Tself reflex(const _Tsurface& s) {
+		_Tself reflex(const _Tsurface& s) const {
 			_Tdot _p = s.p(*this);
 			_Tv4 _sn = s.n(*this);
 			_Tv4 _sv = v * -1;
@@ -62,7 +62,7 @@ namespace X3Dlib {
 			return _Tself(_p, _v, _i);
 		}
 
-		_Tself refract(const _Tsurface& s, const _Titem c) {
+		_Tself refract(const _Tsurface& s, const _Titem c) const {
 			_Tdot _p = s.p(*this);
 			_Tv4 _sn = s.n(*this);
 			_Tv4 _sv = v * -1;
@@ -73,7 +73,7 @@ namespace X3Dlib {
 			return _Tself(_p, _v, _i);
 		}
 
-		bool full_reflex(const _Tsurface& s, const _Titem c) {
+		bool full_reflex(const _Tsurface& s, const _Titem c) const {
 			_Tv4 _sv = v * -1;
 			return _Titem(1) > pow(s.n(*this) PRO_DOT _sv, 2) + pow(c / s.ic, 2);
 		}

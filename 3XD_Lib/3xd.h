@@ -22,6 +22,7 @@ namespace X3Dlib {
 	using transform = _transform;
 
 	using Material = _material;
+	using BaseSurface = _base_surface;
 	using Surface = _quadric_surface;
 	using Plane = _plane;
 

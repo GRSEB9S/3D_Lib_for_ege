@@ -27,6 +27,7 @@ namespace X3Dlib {
 		_Tv4 _u; // upward
 		_Tv4 _r; // towards the right
 	public:
+		_Tself() {}
 		_Tself(const _Tself& src) : _e(src._e), _f(src._f), _u(src._u), _r(src._r) {
 			_e.normalize();
 			_f.normalize();

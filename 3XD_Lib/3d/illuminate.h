@@ -23,53 +23,63 @@ namespace X3Dlib {
 		typedef _affine_vector			_Tv4;
 		typedef _vector< 3, _Titem >	_Tv3;
 
+	protected:
+		_Titem _r;
+		_Titem _g;
+		_Titem _b;
+
 	public:
-		_Titem r;
-		_Titem g;
-		_Titem b;
+		_Tself () : _r(1), _g(1), _b(1) {}
+		_Tself (const _Tself& src) : _r(src._r), _g(src._g), _b(src._b) {}
+		_Tself (const _Titem src[3]) : _r(src[0]), _g(src[1]), _b(src[2]) {}
+		_Tself (const _Titem sr, const _Titem sg, const _Titem sb) : _r(sr), _g(sg), _b(sb) {}
 
-		_Tself () : r(1), g(1), b(1) {}
-		_Tself (const _Tself& src) : r(src.r), g(src.g), b(src.b) {
-			normalize();
-		}
-		_Tself (const _Titem src[3]) : r(src[0]), g(src[1]), b(src[2]) {
-			normalize();
-		}
-		_Tself (const _Titem sr, const _Titem sg, const _Titem sb) : r(sr), g(sg), b(sb) {
-			normalize();
+		_Titem r() const {
+			return _r < _Titem(1) ? (_r > _Titem(0) ? _r : 0) : 1;
 		}
 
-		_Tself& operator = (_Tself& src) {
-			r = src.r; g = src.g; b = src.b;
-			normalize();
+		_Titem g() const {
+			return _g < _Titem(1) ? (_g > _Titem(0) ? _g : 0) : 1;
+		}
+
+		_Titem b() const {
+			return _b < _Titem(1) ? (_b > _Titem(0) ? _b : 0) : 1;
+		}
+
+		_Tself& operator = (const _Tself& src) {
+			_r = src._r; _g = src._g; _b = src._b;
 
 			return *this;
 		}
 
 		bool operator == (const _Tself& opt) const {
-			return DOUBLE_EQ(r, opt.r) && DOUBLE_EQ(g, opt.g) && DOUBLE_EQ(b, opt.b);
+			return DOUBLE_EQ(_r, opt._r) && DOUBLE_EQ(_g, opt._g) && DOUBLE_EQ(_b, opt._b);
 		}
 
 		_Tself operator + (const _Tself& opt) const {
-			return _Tself(r + opt.r, g + opt.g, b + opt.b);
+			return _Tself(_r + opt._r, _g + opt._g, _b + opt._b);
 		}
 
 		_Tself operator - (const _Tself& opt) const {
-			return _Tself(r - opt.r, g - opt.g, b - opt.b);
+			return _Tself(_r - opt._r, _g - opt._g, _b - opt._b);
 		}
 
 		_Tself operator * (const _Titem opt) const {
-			return _Tself(r * opt, g * opt, b * opt);
+			return _Tself(_r * opt, _g * opt, _b * opt);
 		}
 
 		_Tself operator * (const _Tv3& opt) const {
-			return _Tself(r * opt[0], g * opt[1], b * opt[2]);
+			return _Tself(_r * opt[0], _g * opt[1], _b * opt[2]);
+		}
+
+		_Tself operator += (const _Tself& opt) {
+			return (*this) = (*this) + opt;
 		}
 
 		_Tself& normalize() {
-			r = r < _Titem(1) ? r > _Titem(0) ? r : 0 : 1;
-			g = g < _Titem(1) ? g > _Titem(0) ? g : 0 : 1;
-			b = b < _Titem(1) ? b > _Titem(0) ? b : 0 : 1;
+			_r = _r < _Titem(1) ? _r > _Titem(0) ? _r : 0 : 1;
+			_g = _g < _Titem(1) ? _g > _Titem(0) ? _g : 0 : 1;
+			_b = _b < _Titem(1) ? _b > _Titem(0) ? _b : 0 : 1;
 
 			return *this;
 		}
@@ -77,23 +87,24 @@ namespace X3Dlib {
 		_Tself& ambient(const _Tmaterial& mt) {
 			*this = *this * mt.ka;
 
-			normalize();
+			// normalize();
 			return *this;
 		}
 
 		_Tself& diffuse(const _Tmaterial& mt, const _Tv4& n, const _Tv4& l) {
-			_Titem _t = l PRO_DOT n;
+			_Tv4 _n(_Tv4::normalize(n)), _l(_Tv4::normalize(l));
+			_Titem _t = (_l * -1) PRO_DOT _n;
 			*this = *this * _t * mt.kd;
 
-			normalize();
+			// normalize();
 			return *this;
 		}
 
 		_Tself& highlights(const _Tmaterial& mt, const _Tv4& n, const _Tv4& l, const _Tdot& v) {
-			_Titem _t = pow((n * 2 * (l PRO_DOT n) - l) PRO_DOT v, mt.ih);
+			_Titem _t = pow((n * 2 * ((l * -1) PRO_DOT n) - (l * -1)) PRO_DOT v, mt.ih);
 			*this = *this * _t * mt.kh;
 
-			normalize();
+			// normalize();
 			return *this;
 		}
 		
@@ -128,11 +139,18 @@ namespace X3Dlib {
 
 		_Till _i;
 	public:
+		_Tself() {}
 		_Tself(const _Till& i) : _i(i) {}
 		_Tself(const _Tself& src) : _i(src._i) {}
 
-		const _Till& i() {
+		const _Till& i() const {
 			return _i;
+		}
+
+		_Tself& operator = (const _Tself& src) {
+			_i = src._i;
+
+			return *this;
 		}
 	};
 
