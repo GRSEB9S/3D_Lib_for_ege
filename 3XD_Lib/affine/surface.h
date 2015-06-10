@@ -135,7 +135,7 @@ namespace X3Dlib {
 		}
 
 		virtual _Tv4 n(const _Tline& l) const {
-			_Tv4 t = _Tv4::normalize(_Tv4::up(_nabla(l.v.down() * -1)));
+			_Tv4 t = _Tv4::normalize(_Tv4::up(_nabla(l.v.down())));
 			return t;
 		}
 	};

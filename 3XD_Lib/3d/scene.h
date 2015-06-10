@@ -112,9 +112,7 @@ namespace X3Dlib {
 					// add diffuse lights
 					I += _Till::diffuse(pt.i(), *s, s->n(_ray), pt.l() - s->p(_ray));
 					// add hightlight lights
-					/*
-					I += _Till::highlights(pt.i(), *s, s->n(_ray), pt.l() - s->p(_ray), _ray.p);
-					*/
+					I += _Till::highlights(pt.i(), *s, s->n(_ray), pt.l() - s->p(_ray), _ray.p - s->p(_ray));
 				}
 
 				/*

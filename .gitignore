@@ -23,7 +23,6 @@
 *.lib
 
 # Executables
-*.exe
 *.out
 *.app
 
@@ -83,3 +82,4 @@ Release/
 *.*~
 *.swp
 *.swo
+*.opensdf

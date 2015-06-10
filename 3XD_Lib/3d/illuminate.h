@@ -93,15 +93,16 @@ namespace X3Dlib {
 
 		_Tself& diffuse(const _Tmaterial& mt, const _Tv4& n, const _Tv4& l) {
 			_Tv4 _n(_Tv4::normalize(n)), _l(_Tv4::normalize(l));
-			_Titem _t = (_l * -1) PRO_DOT _n;
+			_Titem _t = _l PRO_DOT _n;
 			*this = *this * _t * mt.kd;
 
 			// normalize();
 			return *this;
 		}
 
-		_Tself& highlights(const _Tmaterial& mt, const _Tv4& n, const _Tv4& l, const _Tdot& v) {
-			_Titem _t = pow((n * 2 * ((l * -1) PRO_DOT n) - (l * -1)) PRO_DOT v, mt.ih);
+		_Tself& highlights(const _Tmaterial& mt, const _Tv4& n, const _Tv4& l, const _Tv4& v) {
+			_Tv4 _n = _Tv4::normalize(n), _l = _Tv4::normalize(l), _v = _Tv4::normalize(v);
+			_Titem _t = pow((_n * 2 * (_l PRO_DOT _n) - _l) PRO_DOT _v, mt.ih);
 			*this = *this * _t * mt.kh;
 
 			// normalize();
