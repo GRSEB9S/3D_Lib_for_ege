@@ -72,7 +72,7 @@ namespace X3Dlib {
 		}
 
 		static _Tsquare3 _T(const _Tv3& src) {
-			return *((_Tsquare3*)&(src.trans() * src));
+			return *((_Tsquare3*)&(_Tv3::trans(src) * src));
 		}
 
 		static _Tsquare3 _X(const _Tv3& src) {
@@ -182,7 +182,7 @@ namespace X3Dlib {
 		}
 
 		static _Tsquare4 shear(const _Tplane& l, const _Tv4& u, double a) {
-			_matrix < 3, 3, _Titem > _11 = (l.n().down().trans() * u.down()) * tan(a) + _I();
+			_matrix < 3, 3, _Titem > _11 = (_Tv3::trans(l.n().down()) * u.down()) * tan(a) + _I();
 			_matrix < 3, 1, _Titem > _12;
 			_matrix < 1, 3, _Titem > _21 = u.down() * (l.p().down() PRO_DOT l.n().down()) * tan(a) * -1;
 			_matrix < 1, 1, _Titem > _22 { { _Titem(1) } };
@@ -208,8 +208,8 @@ namespace X3Dlib {
 		}
 
 		static _Tsquare4 persp(const _Tplane& l, const _Tv4& v) {
-			_matrix < 3, 3, _Titem > _11 = l.n().down().trans() * v.down() * -1 + _I() * ((v.down() - l.p().down()) PRO_DOT l.n().down());
-			_matrix < 3, 1, _Titem > _12 = l.n().down().trans() * -1;
+			_matrix < 3, 3, _Titem > _11 = _Tv3::trans(l.n().down()) * v.down() * -1 + _I() * ((v.down() - l.p().down()) PRO_DOT l.n().down());
+			_matrix < 3, 1, _Titem > _12 = _matrix < 1, 3, _Titem >::trans(l.n().down()) * -1;
 			_matrix < 1, 3, _Titem > _21 = v.down() * (l.p().down() PRO_DOT l.n().down());
 			_matrix < 1, 1, _Titem > _22 { { v.down() PRO_DOT l.n().down() } };
 
@@ -222,7 +222,7 @@ namespace X3Dlib {
 
 		static _Tsquare4 pseudodepth(const _Tplane& l, const _Tv4& v) {
 			_matrix < 3, 3, _Titem > _11 = _T(l.n().down()) * -1;
-			_matrix < 3, 1, _Titem > _12 = l.n().down().trans() * -1;
+			_matrix < 3, 1, _Titem > _12 = _matrix < 1, 3, _Titem >::trans(l.n().down()) * -1;
 			_matrix < 1, 3, _Titem > _21 = v.down() * (l.p().down() PRO_DOT l.n().down());
 			_matrix < 1, 1, _Titem > _22 { { v.down() PRO_DOT l.n().down() } };
 

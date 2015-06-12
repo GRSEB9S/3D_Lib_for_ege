@@ -9,6 +9,7 @@
 #include "ray.h"
 #include <vector>
 #include <functional>
+#include <float.h>
 
 #ifndef SCENE_CLASS
 #define SCENE_CLASS
@@ -66,7 +67,7 @@ namespace X3Dlib {
 			size_t height,
 			const std::function< void(_Titem, _Titem, _Till) >& dpx
 			) const {
-			int _recursive = RAY_RECURSIVE;
+			int _recursive = RAY_RECURSIVE, _count = RAY_RECURSIVE;
 
 			for (size_t i = 0; i < width; i++) {
 				for (size_t j = 0; j < height; j++) {
@@ -75,50 +76,77 @@ namespace X3Dlib {
 					// calculations light rays for point to visual screen
 					_Tv4 p = _view.p() - camera.r() * ((_Titem)i / SCALE_PROPORTION - (_Titem)width / SCALE_PROPORTION / 2) - camera.u() * ((_Titem)j / SCALE_PROPORTION - (_Titem)height / SCALE_PROPORTION / 2);
 					_Tray _r(camera.e(), (p - camera.e()).normalize(), _Till(1.0, 1.0, 1.0));
-					_Till I = _ray_tracing(_r, _recursive);
+					if (i == 477 && j == 396) {
+						int i = 0;
+					}
+					_Till I = _ray_tracing(_r, _recursive, _count);
 					dpx(i, j, I);
 				}
 			}
 		}
 
-		_Till _ray_tracing(const _Tray& _ray, int _recursive) const {
-			if (!_recursive) return _ray;
-			else _recursive--;
+		_Till _ray_tracing(const _Tray& _ray, int _recursive, int _count) const {
+			_Till I;
+
+			if (_recursive == _count)
+				I = ambient.i();
+			if (!_recursive)
+				return _Till();
+			else
+				_recursive--;
 
 			// including ambient light once ;
-			_Titem len = -1, _t;
 			const _Tsur* s = nullptr;
+
+			bool is_intersec = false;
+			_Titem len = DBL_MAX;
 			for (const _Tsur* pl : surfaces) {
-				_Tdot p = pl->p(_ray);
+				_Tdot _p = pl->p(_ray);
+				_Titem _t = pl->t(_ray);
 				// have intersections
-				if (!(p == _Tdot())) {
-					_t = (p - _ray.p).mod();
-					if (len == -1 || _t < len) {
+				if (_p != _Tdot() && _t > 0) {
+					is_intersec = true;
+					if (_t < len) {
 						len = _t;
 						s = pl;
 					}
 				}
 			}
 
-			_Till I = ambient.i();
-
-			if (len > -1) {
-
+			if (is_intersec) {
+				_Tdot _p = s->p(_ray);
+				_Tv4 _n = s->n(_p);
 				I = _Till::ambient(ambient.i(), *s);
 
 				for (const _Tpl& pt : pointolits) {
-					// todo : shadow
 
-					// add diffuse lights
-					I += _Till::diffuse(pt.i(), *s, s->n(_ray), pt.l() - s->p(_ray));
-					// add hightlight lights
-					I += _Till::highlights(pt.i(), *s, s->n(_ray), pt.l() - s->p(_ray), _ray.p - s->p(_ray));
+					_Till _i = pt.i();
+					_Tv4 _l = pt.l() - _p;
+					_Tv4 _v = _ray.p - _p;
+
+					_Tline _r(pt.l(), _l * -1);
+					// in shadow
+					bool in_shadow = false;
+					for (const _Tsur* pl : surfaces) {
+						_Titem _ts = pl->t(_r);
+						_Titem _t = s->t(_r);
+						if (_ts != DBL_MAX && _t != DBL_MAX && _ts > 0 && _ts < _t) {
+							in_shadow = true;
+						}
+					}
+
+					if (!in_shadow) {
+						// add diffuse lights
+						I += _Till::diffuse(_i, *s, _n, _l);
+						// add hightlight lights
+						I += _Till::highlights(_i, *s, _n, _l, _v);
+					}
 				}
 
-				/*
 				// calculations secondary light rays with reflection
-				I += _ray_tracing(_ray.reflex(*s), _recursive);
+				I += _ray_tracing(_ray.reflex(_p, _n), _recursive, _count) * s->ks;
 				// calculations secondary light rays with refraction
+				/*
 				if (!_ray.full_reflex(*s, 1))
 					I += _ray_tracing(_ray.refract(*s, 1), _recursive);
 					*/

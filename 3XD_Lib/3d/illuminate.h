@@ -29,7 +29,7 @@ namespace X3Dlib {
 		_Titem _b;
 
 	public:
-		_Tself () : _r(1), _g(1), _b(1) {}
+		_Tself () : _r(0), _g(0), _b(0) {}
 		_Tself (const _Tself& src) : _r(src._r), _g(src._g), _b(src._b) {}
 		_Tself (const _Titem src[3]) : _r(src[0]), _g(src[1]), _b(src[2]) {}
 		_Tself (const _Titem sr, const _Titem sg, const _Titem sb) : _r(sr), _g(sg), _b(sb) {}
@@ -87,25 +87,30 @@ namespace X3Dlib {
 		_Tself& ambient(const _Tmaterial& mt) {
 			*this = *this * mt.ka;
 
-			// normalize();
 			return *this;
 		}
 
 		_Tself& diffuse(const _Tmaterial& mt, const _Tv4& n, const _Tv4& l) {
 			_Tv4 _n(_Tv4::normalize(n)), _l(_Tv4::normalize(l));
 			_Titem _t = _l PRO_DOT _n;
+			if (_t < 0) {
+				_t = 0;
+			}
 			*this = *this * _t * mt.kd;
 
-			// normalize();
 			return *this;
 		}
 
 		_Tself& highlights(const _Tmaterial& mt, const _Tv4& n, const _Tv4& l, const _Tv4& v) {
 			_Tv4 _n = _Tv4::normalize(n), _l = _Tv4::normalize(l), _v = _Tv4::normalize(v);
-			_Titem _t = pow((_n * 2 * (_l PRO_DOT _n) - _l) PRO_DOT _v, mt.ih);
+			_Titem _t = _l PRO_DOT _n;
+			if (_t < 0) {
+				_t = 0;
+			} else {
+				_t = pow((_n * 2 * _t - _l) PRO_DOT _v, mt.ih);
+			}
 			*this = *this * _t * mt.kh;
 
-			// normalize();
 			return *this;
 		}
 		

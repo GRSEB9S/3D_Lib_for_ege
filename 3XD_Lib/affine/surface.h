@@ -3,6 +3,7 @@
 #include "affine.h"
 #include "line.h"
 #include <math.h>
+#include <float.h>
 
 #ifndef TEMPLATE_PLANE
 #define TEMPLATE_PLANE
@@ -12,6 +13,7 @@ namespace X3Dlib {
 	class _surface;
 	class _material;
 	class _quadric_surface;
+	class _deformation_surface;
 	class _plane;
 
 	class _surface {
@@ -21,7 +23,7 @@ namespace X3Dlib {
 		typedef _line				_Tline;
 	public :
 		virtual _Tdot p(const _Tline& l) const = 0;
-		virtual _Tv4 n(const _Tline& l) const = 0;
+		virtual _Tv4 n(const _Tdot& p) const = 0;
 	};
 	
 	class _material {
@@ -57,6 +59,7 @@ namespace X3Dlib {
 	class _base_surface
 		: public _surface, public _material {
 		typedef _base_surface		_Tself;
+		typedef double				_Titem;
 		typedef _affine_vector		_Tdot;
 		typedef _affine_vector		_Tv4;
 		typedef _line				_Tline;
@@ -64,9 +67,13 @@ namespace X3Dlib {
 		virtual _Tdot p(const _Tline& l) const {
 			throw "";
 		};
-		virtual _Tv4 n(const _Tline& l) const {
+		virtual _Tv4 n(const _Tdot& p) const {
 			throw "";
 		};
+
+		virtual _Titem t(const _Tline& l) const {
+			throw "";
+		}
 	};
 
 	class _quadric_surface
@@ -80,63 +87,133 @@ namespace X3Dlib {
 		typedef _affine_vector		_Tv4;
 		typedef _line				_Tline;
 
-		_Tm4 q;
-	private:
-		_Tv3 _nabla(const _Tv3& src) const {
+	protected:
+		_Tm4 _q;
+
+		virtual _Tv3 _nabla(const _Tv3& src) const {
 			return _Tv3({
-				_Tv4(q[0]) PRO_DOT _Tv4::up(src, 1),
-				_Tv4(q[1]) PRO_DOT _Tv4::up(src, 1),
-				_Tv4(q[2]) PRO_DOT _Tv4::up(src, 1),
+				_Tv4(_q[0]) PRO_DOT _Tv4::up(src, 1),
+				_Tv4(_q[1]) PRO_DOT _Tv4::up(src, 1),
+				_Tv4(_q[2]) PRO_DOT _Tv4::up(src, 1),
 			}) * 2;
 		}
 
-		_Titem _f(const _Tdot& src) const {
-			return ((const _matrix < 4, 4, _Titem >&)src * q * src.trans())[0][0];
+		virtual _Titem _f(const _Tdot& src) const {
+			return ((const _matrix < 4, 4, _Titem >&)src * _q * _Tv4::trans(src))[0][0];
 		}
 
-		_Titem _n(const _Tv3& src) const {
+		virtual _Titem _n(const _Tv3& src) const {
 			return
-				q[0][0] * src[0] * src[0] +
-				q[1][1] * src[1] * src[1] +
-				q[2][2] * src[2] * src[2] +
-				q[0][1] * src[0] * src[1] * 2 +
-				q[1][2] * src[1] * src[2] * 2 +
-				q[0][2] * src[0] * src[2] * 2;
+				_q[0][0] * src[0] * src[0] +
+				_q[1][1] * src[1] * src[1] +
+				_q[2][2] * src[2] * src[2] +
+				_q[0][1] * src[0] * src[1] * 2 +
+				_q[1][2] * src[1] * src[2] * 2 +
+				_q[0][2] * src[0] * src[2] * 2;
 		}
 
 	public :
 		_Tself(_Titem a, _Titem b, _Titem c, _Titem d, _Titem e, _Titem f, _Titem g, _Titem h, _Titem i, _Titem j) {
-			q = {
+			_q = {
 				{ a, d, f, g },
 				{ d, b, e, h },
 				{ f, e, c, i },
 				{ g, h, i, j },
 			};
 		}
-		_Tself(const _Tself& src) : q(src.q) {}
+		_Tself(const _Tself& src) : _q(src._q) {}
 
 		_Tself& operator = (const _Tself& src) {
-			q = src.q;
+			_q = src._q;
 			return *this;
 		}
 
 		virtual _Tdot p(const _Tline& l) const {
+			_Titem _t = t(l);
+			return _t == DBL_MAX ? _Tdot() : l.p + l.v * _t;
+		}
+
+		virtual _Tv4 n(const _Tdot& p) const {
+			return _Tv4::normalize(_Tv4::up(_nabla(p.down())));
+		}
+
+		virtual _Titem t(const _Tline& l) const {
 			_Titem a = _n(l.v.down()), b = l.v.down() PRO_DOT _nabla(l.p.down()), c = _f(l.p);
 			_Titem t = pow(b, 2) - 4 * a * c;
 
 			if (t < 0) {
-				return _Tdot();
-			} else if (t == 0) {
-				return l.p + l.v * (-b / (2 * a));
-			} else {
+				return DBL_MAX;
+			}
+			else if (t == 0) {
+				return -b / (2 * a);
+			}
+			else {
 				_Titem x1 = (-b + sqrt(t)) / (2 * a), x2 = (-b - sqrt(t)) / (2 * a);
-				return l.p + l.v * (x1 > x2 ? x2 : x1);
+				return (x1 > x2 ? x2 : x1);
 			}
 		}
+	};
 
-		virtual _Tv4 n(const _Tline& l) const {
-			_Tv4 t = _Tv4::normalize(_Tv4::up(_nabla(l.v.down())));
-			return t;
+	class _deformation_surface
+		: public _quadric_surface {
+		typedef _deformation_surface	_Tself;
+		typedef _quadric_surface		_Tbase;
+		typedef double					_Titem;
+		typedef _vector< 3, _Titem >	_Tv3;
+		typedef _square< 3, _Titem >	_Tm3;
+		typedef _square< 4, _Titem >	_Tm4;
+		typedef _affine_vector			_Tdot;
+		typedef _affine_vector			_Tv4;
+		typedef _line					_Tline;
+
+	protected:
+		_Tm4 _d;
+
+	public:
+		_Tself(const _Tself& src) : _Tbase(src), _d(src._d) {
+			_q = (_d ^ -1) * _q * (_d ^ -1).trans();
+		}
+		_Tself(const _Tbase& sb, const _Tm4& sd) : _Tbase(sb), _d(sd) {
+			_q = (_d ^ -1) * _q * (_d ^ -1).trans();
+		}
+		_Tself(_Titem a, _Titem b, _Titem c, _Titem d, _Titem e, _Titem f, _Titem g, _Titem h, _Titem i, _Titem j, const _Tm4& sd) : _Tbase(a, b, c, d, e, f, g, h, i, j), _d(sd) {
+			_q = (_d ^ -1) * _q * (_d ^ -1).trans();
+		}
+
+		_Tself& operator = (const _Tself& src) {
+			_q = src._q;
+			_d = src._d;
+			return *this;
+		}
+
+		void set_deformation(const _Tm4& d) {
+			_d = d;
+			_q = (_d ^ -1) * _q * (_d ^ -1).trans();
+		}
+
+		virtual _Tdot p(const _Tline& l) const {
+			/*	
+			_Tm4 _td = _d ^ -1;
+			_Tline _l(l.p * _td, l.v * _td);
+			return _Tbase::p(_l) * _d;
+			*/
+			return _Tbase::p(l);
+		}
+
+		virtual _Tv4 n(const _Tdot& p) const {
+			/*
+			_Tm4 _td = _d ^ -1;
+			_Tline _l(l.p * _td, l.v * _td);
+			_Tv4 _n = _Tbase::n(_l);
+			_Tm3 _t = _Tm4::cofactor(_d, 3, 3);
+
+			return _Tv4::up(_n.down() * _Tm3::trans(_t ^ -1));
+			*/
+			return _Tbase::n(p);
+		}
+
+		virtual _Titem t(const _Tline& l) const {
+			return _Tbase::t(l);
 		}
 	};
 
@@ -185,12 +262,12 @@ namespace X3Dlib {
 			return *this;
 		}
 
-		_Tdot p(const _Tline& l) const override {
+		virtual _Tdot p(const _Tline& l) const {
 			// TODO;
 			return _p;
 		}
 
-		_Tv4 n(const _Tline& l) const override {
+		virtual _Tv4 n(const _Tdot& p) const {
 			return _n;
 		}
 

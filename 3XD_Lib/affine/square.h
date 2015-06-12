@@ -99,6 +99,10 @@ namespace X3Dlib {
 			return _Tself::det(*this);
 		}
 
+		virtual _Tself trans() {
+			return (*this = _Tself::trans(*this));
+		}
+
 		template < int o, typename T >
 		static T det (const _square < o, T > & opt) {
 			T _v = T();
@@ -115,6 +119,16 @@ namespace X3Dlib {
 
 		template <>
 		static T det (const _square < 0, T > & opt) {
+			throw "";
+		}
+
+		template < int o, typename T >
+		static _square < o, T > trans(const _square < o, T >& opt) {
+			return *(_Tself*)&_Tbase::trans(opt);
+		}
+
+		template < typename T >
+		static _square < 0, T > trans(const _square < 0, T > & opt) {
 			throw "";
 		}
 

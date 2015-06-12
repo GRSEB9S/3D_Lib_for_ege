@@ -116,10 +116,6 @@ namespace X3Dlib {
 			return _t * (T(1) / opt);
 		}
 
-		_matrix< m, l, T > trans () const {
-			return _Tself::trans(*this);
-		}
-
 		template < int o, int p >
 		static _matrix < p, o, T > trans (const _matrix < o, p, T >& opt) {
 			T _t[p][o];

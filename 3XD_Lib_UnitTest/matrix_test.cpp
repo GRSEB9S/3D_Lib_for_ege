@@ -169,7 +169,7 @@ namespace My3D_Lib_for_ege_UnitTest
 
 			Assert::IsTrue(t2 == t3);
 
-			_matrix< 3, 2, double > t4 = t1.trans();
+			_matrix< 3, 2, double > t4 = _matrix< 2, 3, double >::trans(t1);
 
 			Assert::IsTrue(t2 == t4);
 		}

@@ -52,7 +52,7 @@ namespace My3D_Lib_for_ege_UnitTest
 			_affine_vector _n{ 0, 1, 1, 0 };
 			_affine_vector _l{ 1, 1, 1, 0 };
 
-			Assert::IsTrue(_t1.diffuse(_m, _n, _l) == _illuminate(0.12, 0.24, 0.4));
+			Assert::IsTrue(_t1.diffuse(_m, _n, _l) == _illuminate(0.048989794855663564, 0.097979589711327128, 0.16329931618554522));
 		}
 
 		TEST_METHOD(illuminate_highlights)
@@ -63,7 +63,7 @@ namespace My3D_Lib_for_ege_UnitTest
 			_affine_vector _l{ 1, 1, 1, 0 };
 			_affine_vector _v{ 0, 0.5, 1, 0 };
 
-			Assert::IsTrue(_t1.highlights(_m, _n, _l, _v) == _illuminate(0.001875, 0.005, 0.009375));
+			Assert::IsTrue(_t1.highlights(_m, _n, _l, _v) == _illuminate(0.00013333333333333337, 0.00035555555555555574, 0.00066666666666666686));
 		}
 	};
 }

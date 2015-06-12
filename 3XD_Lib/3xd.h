@@ -24,6 +24,7 @@ namespace X3Dlib {
 	using Material = _material;
 	using BaseSurface = _base_surface;
 	using Surface = _quadric_surface;
+	using DeformationSurface = _deformation_surface;
 	using Plane = _plane;
 
 	using Camera = _camera;

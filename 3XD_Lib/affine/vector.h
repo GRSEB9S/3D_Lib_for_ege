@@ -67,7 +67,7 @@ namespace X3Dlib {
 		}
 
 		T operator PRO_DOT (const _Tself& opt) const {
-			return (*this * opt.trans())[0];
+			return (*this * _Tself::trans(opt))[0];
 		}
 
 		_Tself operator PRO_PARALLEL (const _Tself& opt) const {

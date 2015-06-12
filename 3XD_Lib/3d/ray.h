@@ -20,6 +20,7 @@ namespace X3Dlib {
 		typedef _affine_vector	_Tdot;
 		typedef _material		_Tmaterial;
 		typedef _base_surface	_Tsurface;
+		typedef _material		_Tmaterial;
 
 	public :
 		_Tself(const _Tbl& _l, const _Tbi& _i) : _Tbl(_l), _Tbi(_i) {
@@ -52,30 +53,31 @@ namespace X3Dlib {
 				v == src.v;
 		}
 
-		_Tself reflex(const _Tsurface& s) const {
-			_Tdot _p = s.p(*this);
-			_Tv4 _sn = s.n(*this);
+		_Tself reflex(const _Tdot& p, const _Tv4& n) const {
+			_Tdot _p = _Tdot::normalize(p);
+			_Tv4 _sn = _Tv4::normalize(n);
 			_Tv4 _sv = v * -1;
 			_Tv4 _v = _sn * 2 * (_sv PRO_DOT _sn) - _sv;
-			_Tbi _i = *this * s.ks;
+			_Tbi _i = _Tbi(1, 1, 1);
 
 			return _Tself(_p, _v, _i);
 		}
 
-		_Tself refract(const _Tsurface& s, const _Titem c) const {
-			_Tdot _p = s.p(*this);
-			_Tv4 _sn = s.n(*this);
+		_Tself refract(const _Tmaterial& m, const _Tdot& p, const _Tv4& n, const _Titem c) const {
+			_Tdot _p = _Tdot::normalize(p);
+			_Tv4 _sn = _Tv4::normalize(n);
 			_Tv4 _sv = v * -1;
-			_Tv4 _v = _sn * (s.ic / c * (_sn PRO_DOT _sv) - sqrt(1 - pow(s.ic / c, 2) * (1 - pow(_sn PRO_DOT _sv, 2)))) - (_sv * (s.ic / c));
+			_Tv4 _v = _sn * (m.ic / c * (_sn PRO_DOT _sv) - sqrt(1 - pow(m.ic / c, 2) * (1 - pow(_sn PRO_DOT _sv, 2)))) - (_sv * (m.ic / c));
 			// TODO;
-			_Tbi _i = *this;
+			_Tbi _i = _Tbi(1, 1, 1);
 
 			return _Tself(_p, _v, _i);
 		}
 
-		bool full_reflex(const _Tsurface& s, const _Titem c) const {
+		bool full_reflex(const _Tmaterial& m, const _Tv4& n, const _Titem c) const {
+			_Tv4 _sn = _Tv4::normalize(n);
 			_Tv4 _sv = v * -1;
-			return _Titem(1) > pow(s.n(*this) PRO_DOT _sv, 2) + pow(c / s.ic, 2);
+			return _Titem(1) > pow(_sn PRO_DOT _sv, 2) + pow(c / m.ic, 2);
 		}
 	};
 }
