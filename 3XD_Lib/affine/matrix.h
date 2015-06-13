@@ -24,7 +24,7 @@ namespace X3Dlib {
 		_Tself() {
 			for (int i = 0; i < l; i++)
 				for (int j = 0; j < m; j++)
-					v[i][j] = 0;
+					v[i][j] = T(0);
 		}
 
 		_Tself(const T src[l][m]) {

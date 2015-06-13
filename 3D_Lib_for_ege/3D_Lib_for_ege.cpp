@@ -255,18 +255,26 @@ void main_loop_3() {
 
 	X3Dlib::Scene s;
 	X3Dlib::Matrix trs = X3Dlib::transform::trans({ 4.5, -2, -4, 0 });
+	X3Dlib::Matrix trs2 = X3Dlib::transform::trans({ -4.5, 0, -4, 0 });
 	X3Dlib::DeformationSurface sf(1, 1, 1, 0, 0, 0, 0, 0, 0, -12, X3Dlib::Matrix(X3Dlib::IDENTITY_MATRIX));
 	X3Dlib::DeformationSurface sf2(1, 1, 1, 0, 0, 0, 0, 0, 0, -3, trs);
+	X3Dlib::DeformationSurface sf3(1.0 / 2, -1.0 / 4, 1.0 / 3, 0, 0, 0, 0, 0, 0, -1, trs2);
 	sf.ka = { 0.3, 0.3, 0.3 };
 	sf.kd = { 0, 0, 0 };
 	sf.kh = { 1, 1, 1 };
 	sf.ks = { 1, 1, 1 };
 	sf.ih = 80;
+
 	sf2.ka = { 0.3, 0.3, 0.3 };
 	sf2.kd = { 0.8, 0.8, 0.8 };
 	sf2.kh = { 0, 0, 0 };
 	sf2.ks = { 0, 0, 0 };
 	sf2.ih = 80;
+
+	sf3.ka = { 0.3, 0.3, 0.3 };
+	sf3.kd = { 0.8, 0.8, 0.8 };
+	sf3.kh = { 0, 0, 0 };
+	sf3.ks = { 0, 0, 0 };
 
 	X3Dlib::Pointolite pl1(X3Dlib::Illuminate(0.8, 0.8, 0.8), { 0, 1, -5, 1 });
 	X3Dlib::Pointolite pl2(X3Dlib::Illuminate(1, 0, 0), { 12, 12, 0, 1 });
@@ -274,6 +282,7 @@ void main_loop_3() {
 
 	s.add_surface(&sf);
 	s.add_surface(&sf2);
+	s.add_surface(&sf3);
 	s.add_pointolit(pl1);
 	s.add_pointolit(pl2);
 	// s.add_pointolit(pl3);

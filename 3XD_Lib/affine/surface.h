@@ -90,26 +90,16 @@ namespace X3Dlib {
 	protected:
 		_Tm4 _q;
 
-		virtual _Tv3 _nabla(const _Tv3& src) const {
-			return _Tv3({
-				_Tv4(_q[0]) PRO_DOT _Tv4::up(src, 1),
-				_Tv4(_q[1]) PRO_DOT _Tv4::up(src, 1),
-				_Tv4(_q[2]) PRO_DOT _Tv4::up(src, 1),
-			}) * 2;
+		virtual _Tv4 _nabla(const _Tv4& src) const {
+			return _Tv4::up((src * _q * 2).down());
 		}
 
 		virtual _Titem _f(const _Tdot& src) const {
 			return ((const _matrix < 4, 4, _Titem >&)src * _q * _Tv4::trans(src))[0][0];
 		}
 
-		virtual _Titem _n(const _Tv3& src) const {
-			return
-				_q[0][0] * src[0] * src[0] +
-				_q[1][1] * src[1] * src[1] +
-				_q[2][2] * src[2] * src[2] +
-				_q[0][1] * src[0] * src[1] * 2 +
-				_q[1][2] * src[1] * src[2] * 2 +
-				_q[0][2] * src[0] * src[2] * 2;
+		virtual _Titem _n(const _Tv4& src) const {
+			return (src.down() * _Tm4::cofactor(_q, 3, 3)) PRO_DOT src.down();
 		}
 
 	public :
@@ -134,22 +124,31 @@ namespace X3Dlib {
 		}
 
 		virtual _Tv4 n(const _Tdot& p) const {
-			return _Tv4::normalize(_Tv4::up(_nabla(p.down())));
+			return _Tv4::normalize(_nabla(p));
 		}
 
 		virtual _Titem t(const _Tline& l) const {
-			_Titem a = _n(l.v.down()), b = l.v.down() PRO_DOT _nabla(l.p.down()), c = _f(l.p);
-			_Titem t = pow(b, 2) - 4 * a * c;
+			_Titem a = _n(l.v), b = l.v PRO_DOT _nabla(l.p), c = _f(l.p);
+			if (a == 0) {
+				if (b == 0) {
+					if (c == 0)
+						return DBL_MAX;
+					else
+						return -c;
+				} else {
+					return -c / b;
+				}
+			} else {
+				_Titem t = pow(b, 2) - 4 * a * c;
 
-			if (t < 0) {
-				return DBL_MAX;
-			}
-			else if (t == 0) {
-				return -b / (2 * a);
-			}
-			else {
-				_Titem x1 = (-b + sqrt(t)) / (2 * a), x2 = (-b - sqrt(t)) / (2 * a);
-				return (x1 > x2 ? x2 : x1);
+				if (t < 0) {
+					return DBL_MAX;
+				} else if (t == 0) {
+					return -b / (2 * a);
+				} else {
+					_Titem x1 = (-b + sqrt(t)) / (2 * a), x2 = (-b - sqrt(t)) / (2 * a);
+					return (x1 > x2 ? x2 : x1);
+				}
 			}
 		}
 	};

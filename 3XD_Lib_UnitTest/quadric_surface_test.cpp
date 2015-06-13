@@ -13,12 +13,12 @@ namespace My3D_Lib_for_ege_UnitTest
 	public:
 		TEST_METHOD(surface_n_p) {
 			_quadric_surface _sur(1.0, 1.0, 1.0, 0, 0, 0, 0, 0, 0, -1);
-			_line l({ 0, 0, 5, 1 }, { 0, 0, -1, 0 });
+			_line l({ 0, 0, -5, 1 }, { 0, 0, 1, 0 });
 
 			_affine_vector _dot = _sur.p(l);
-			_affine_vector _vec = _sur.n(l);
+			_affine_vector _vec = _sur.n(_dot);
 
-			Assert::IsTrue(_dot == _affine_vector{ 0, 0, 1, 1 });
+			Assert::IsTrue(_dot == _affine_vector{ 0, 0, -1, 1 });
 			Assert::IsTrue(_vec == _affine_vector{ 0, 0, -1, 0 });
 
 			l = _line({ 0, 0, 5, 1 }, { -1, 0, 0, 0 });
@@ -43,15 +43,13 @@ namespace My3D_Lib_for_ege_UnitTest
 				{-3, 1, 9,},
 			};
 			_deformation_surface _sur(1, 1, 1, 0, 0, 0, 0, 0, 0, -1, s);
-			_line l({ 0, 0, 5, 1 }, { 0, 0, -1, 0 });
-
-			_square < 3, double > s3 = s2.trans() ^ -1;
+			_line l({ 0, 0, -5, 1 }, { 0, 0, 1, 0 });
 
 			_affine_vector _dot = _sur.p(l);
-			_affine_vector _vec = _sur.n(l);
+			_affine_vector _vec = _sur.n(_dot);
 
-			Assert::IsTrue(_dot == _affine_vector{0, 1, 10, 1});
-			Assert::IsTrue(_vec == _affine_vector{ -0.065573770491803282, 0.27868852459016397, -0.16393442622950821, 0 });
+			Assert::IsTrue(_dot == _affine_vector{ 0, 0, -0.30934952981398478, 1 });
+			Assert::IsTrue(_vec == _affine_vector{ -0.42220738790766504, 0.85116337707763723, -0.31186828488639007, 0 });
 		}
 	};
 }

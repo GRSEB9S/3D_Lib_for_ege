@@ -1,3 +1,4 @@
+#include <amp.h>
 
 #ifndef X3Dlib_INC
 #define X3Dlib_INC

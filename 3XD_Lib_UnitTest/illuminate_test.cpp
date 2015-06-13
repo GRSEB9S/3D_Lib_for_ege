@@ -13,9 +13,9 @@ namespace My3D_Lib_for_ege_UnitTest
 		TEST_METHOD(illuminate_init)
 		{
 			_illuminate _t1;
-			_illuminate _t2(1, 1, 1);
+			_illuminate _t2(0, 0, 0);
 
-			double _d[3] = { 1, 1, 1 };
+			double _d[3] = { 0, 0, 0 };
 			_illuminate _t3(_d);
 
 			Assert::IsTrue(_t1 == _t2);
