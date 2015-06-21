@@ -1,29 +1,34 @@
+#ifndef _3XD_LIB
+#define _3XD_LIB
+
 #include "inc.h"
-#include "affine/matrix.h"
-#include "affine/square.h"
-#include "affine/vector.h"
-#include "affine/affine.h"
-#include "affine/line.h"
-#include "affine/surface.h"
-#include "affine/transform.h"
-#include "affine/computus.h"
+#include "linear/matrix.h"
+#include "linear/square.h"
+#include "linear/vector.h"
 
-#include "3d/plot.h"
-#include "3d/camera.h"
-#include "3d/illuminate.h"
-#include "3d/scene.h"
+#include "geometry/affine.h"
+#include "geometry/line.h"
+#include "geometry/surface_quadratic.h"
+#include "geometry/surface_deformation.h"
+#include "geometry/transform.h"
+#include "geometry/computus.h"
 
-namespace X3Dlib {
+#include "scene/plot.h"
+#include "scene/camera.h"
+#include "scene/illuminate.h"
+#include "scene/scene.h"
+
+namespace Z_3D_LIB_FOR_EGE {
 	using Matrix = _square < 4, double >;
 	using Vector = _affine_vector;
+
 	using Dot = _affine_vector;
 	using Line = _line;
 	using plot = _plot;
 	using transform = _transform;
 
 	using Material = _material;
-	using BaseSurface = _base_surface;
-	using Surface = _quadric_surface;
+	using Surface = _quadratic_surface;
 	using DeformationSurface = _deformation_surface;
 	using Plane = _plane;
 
@@ -33,3 +38,5 @@ namespace X3Dlib {
 	using Pointolite = _pointolite;
 	using Scene = _scene;
 }
+ 
+#endif // _3XD_LIB

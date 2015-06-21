@@ -78,21 +78,32 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="3d\camera.h" />
-    <ClInclude Include="3d\illuminate.h" />
-    <ClInclude Include="3d\plot.h" />
-    <ClInclude Include="3d\ray.h" />
-    <ClInclude Include="3d\scene.h" />
     <ClInclude Include="3xd.h" />
-    <ClInclude Include="affine\affine.h" />
-    <ClInclude Include="affine\computus.h" />
-    <ClInclude Include="affine\line.h" />
-    <ClInclude Include="affine\matrix.h" />
-    <ClInclude Include="affine\surface.h" />
-    <ClInclude Include="affine\square.h" />
-    <ClInclude Include="affine\transform.h" />
-    <ClInclude Include="affine\vector.h" />
+    <ClInclude Include="geometry\affine.h" />
+    <ClInclude Include="geometry\surface_base.h" />
+    <ClInclude Include="geometry\computus.h" />
+    <ClInclude Include="geometry\Itrackable.h" />
+    <ClInclude Include="geometry\line.h" />
+    <ClInclude Include="geometry\material.h" />
+    <ClInclude Include="geometry\surface_plane.h" />
+    <ClInclude Include="geometry\surface_quadratic.h" />
+    <ClInclude Include="geometry\surface_deformation.h" />
+    <ClInclude Include="geometry\transform.h" />
     <ClInclude Include="inc.h" />
+    <ClInclude Include="linear\matrix.h" />
+    <ClInclude Include="linear\square.h" />
+    <ClInclude Include="linear\vector.h" />
+    <ClInclude Include="scene\camera.h" />
+    <ClInclude Include="scene\illuminate.h" />
+    <ClInclude Include="scene\illuminate_ambient.h" />
+    <ClInclude Include="scene\illuminate_pointolite.h" />
+    <ClInclude Include="scene\plot.h" />
+    <ClInclude Include="scene\ray.h" />
+    <ClInclude Include="scene\scene.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
+    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

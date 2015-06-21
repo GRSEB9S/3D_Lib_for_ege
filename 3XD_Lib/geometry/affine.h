@@ -1,13 +1,13 @@
 #include "../inc.h"
-#include "matrix.h"
-#include "square.h"
-#include "vector.h"
+#include "../linear/matrix.h"
+#include "../linear/square.h"
+#include "../linear/vector.h"
 #include <initializer_list>
 
 #ifndef AFFINE_CLASSES
 #define AFFINE_CLASSES
 
-namespace X3Dlib {
+namespace Z_3D_LIB_FOR_EGE {
 
 	class _affine_vector;
 

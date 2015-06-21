@@ -6,7 +6,6 @@
 // mathematics
 #define PI 3.14159265358979323846
 
-
 // distance for camera to perspective projection plane
 #define VIEWPORT_DISTANCE	5
 #define SCALE_PROPORTION	100.0

@@ -1,10 +1,9 @@
-#include "stdafx.h"
 #include "CppUnitTest.h"
 #include "CppUnitTestAssert.h"
-#include "../3XD_Lib/affine/matrix.h"
+#include "../3XD_Lib/linear/matrix.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
-using namespace X3Dlib;
+using namespace Z_3D_LIB_FOR_EGE;
 
 namespace My3D_Lib_for_ege_UnitTest
 {		

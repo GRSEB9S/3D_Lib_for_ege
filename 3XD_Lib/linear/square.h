@@ -1,12 +1,12 @@
 #include "../inc.h"
+#include "matrix.h"
 #include <math.h>
 #include <initializer_list>
-#include "matrix.h"
 
 #ifndef TEMPLATE_SQUARE
 #define TEMPLATE_SQUARE
 
-namespace X3Dlib {
+namespace Z_3D_LIB_FOR_EGE {
 
 	enum SQUARE_MATRIX_TYPE {
 		ZERO_MATRIX = 0,
@@ -26,15 +26,7 @@ namespace X3Dlib {
 
 	public:
 		_Tself(const SQUARE_MATRIX_TYPE opt = SQUARE_MATRIX_TYPE::ZERO_MATRIX) {
-			T t;
-			switch (opt) {
-			case SQUARE_MATRIX_TYPE::IDENTITY_MATRIX:
-				t = T(1);
-				break;
-			default:
-				t = T(0);
-				break;
-			}
+			T t = T((int)opt);
 			for (int i = 0; i < o; i++)
 				v[i][i] = t;
 		}
@@ -138,11 +130,11 @@ namespace X3Dlib {
 			int _mr = 0, _mc = 0;
 			for (int i = 0; i < o; i++, _mc = 0)
 				if (i != r)
-				for (int j = 0; j < o; j++)
-				if (j != c)
-				_t[i - _mr][j - _mc] = opt[i][j];
-				else
-					_mc = 1;
+					for (int j = 0; j < o; j++)
+						if (j != c)
+							_t[i - _mr][j - _mc] = opt[i][j];
+						else
+							_mc = 1;
 				else
 					_mr = 1;
 
@@ -161,7 +153,7 @@ namespace X3Dlib {
 				T _t[o][o];
 				for (int i = 0; i < o; i++)
 					for (int j = 0; j < o; j++)
-					_t[j][i] = _square::det(_square::cofactor(opt, i, j)) * (double)pow(-1.0, i + j + 2);
+						_t[j][i] = _square::det(_square::cofactor(opt, i, j)) * (double)pow(-1.0, i + j + 2);
 
 				return _square < o, T > (_t) * (1 / _det);
 			}

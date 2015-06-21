@@ -1,43 +1,42 @@
 #include "../inc.h"
-#include "../affine/surface.h"
-#include "../affine/line.h"
-#include "../affine/affine.h"
-#include "../affine/computus.h"
-#include "../affine/transform.h"
-#include "illuminate.h"
+#include "../geometry/line.h"
+#include "../geometry/affine.h"
+#include "../geometry/computus.h"
+#include "../geometry/transform.h"
+#include "../geometry/surface_quadratic.h"
+#include "illuminate_ambient.h"
+#include "illuminate_pointolite.h"
 #include "camera.h"
 #include "ray.h"
 #include <vector>
 #include <functional>
 #include <float.h>
 
-#ifndef SCENE_CLASS
-#define SCENE_CLASS
+#ifndef CLASS_SCENE
+#define CLASS_SCENE
 
-namespace X3Dlib {
+namespace Z_3D_LIB_FOR_EGE {
 	class _scene;
 
 	class _scene {
-		typedef _scene		_Tself;
-		typedef double		_Titem;
-		typedef _plane		_Tplane;
-		typedef _line		_Tline;
-		typedef _pointolite	_Tpoint;
-		typedef _ambient	_Tambient;
-		typedef _camera		_Tcamera;
-		typedef _ray		_Tray;
-		typedef _affine_vector _Tv4;
-		typedef _affine_vector _Tdot;
-		typedef _illuminate _Till;
-		typedef _material	_Tmaterial;
-		typedef _quadric_surface	_Tqs;
-		typedef _base_surface	_Tsur;
+		typedef _scene			_Tself;
+		typedef double			_Titem;
+		typedef _plane			_Tplane;
+		typedef _line			_Tline;
+		typedef _ambient		_Tam;
 		typedef _pointolite		_Tpl;
+		typedef _camera			_Tcamera;
+		typedef _ray			_Tray;
+		typedef _affine_vector	_Tv4;
+		typedef _affine_vector	_Tdot;
+		typedef _illuminate		_Till;
+		typedef _material		_Tmaterial;
+		typedef _base_surface	_Tsur;
 
 	public:
 		std::vector< const _Tsur* > surfaces;
 		std::vector< _Tpl > pointolits;
-		_Tambient ambient;
+		_Tam ambient;
 		_Tcamera camera;
 
 		_Tself() {}
@@ -54,7 +53,7 @@ namespace X3Dlib {
 			pointolits.push_back(poi);
 		}
 
-		void set_ambient(const _Tambient& amb) {
+		void set_ambient(const _Tam& amb) {
 			ambient = amb;
 		}
 
@@ -101,8 +100,13 @@ namespace X3Dlib {
 			bool is_intersec = false;
 			_Titem len = DBL_MAX;
 			for (const _Tsur* pl : surfaces) {
+				_Tdot _p;
+				_Titem _t;
+				pl->intersect(_ray, &_p, nullptr, &_t);
+				/*
 				_Tdot _p = pl->p(_ray);
 				_Titem _t = pl->t(_ray);
+				*/
 				// have intersections
 				if (_p != _Tdot() && _t > 0) {
 					is_intersec = true;
@@ -114,8 +118,13 @@ namespace X3Dlib {
 			}
 
 			if (is_intersec) {
+				/*
 				_Tdot _p = s->p(_ray);
 				_Tv4 _n = s->n(_p);
+				*/
+				_Tdot _p;
+				_Tv4 _n;
+				s->intersect(_ray, &_p, &_n, nullptr, 1);
 				I = _Till::ambient(ambient.i(), *s);
 
 				for (const _Tpl& pt : pointolits) {
@@ -128,8 +137,13 @@ namespace X3Dlib {
 					// in shadow
 					bool in_shadow = false;
 					for (const _Tsur* pl : surfaces) {
+						_Titem _t, _ts;
+						pl->intersect(_r, nullptr, nullptr, &_ts, 1);
+						s->intersect(_r, nullptr, nullptr, &_t, 1);
+						/*
 						_Titem _ts = pl->t(_r);
 						_Titem _t = s->t(_r);
+						*/
 						if (_ts != DBL_MAX && _t != DBL_MAX && _ts > 0 && _ts < _t) {
 							in_shadow = true;
 						}
@@ -157,4 +171,4 @@ namespace X3Dlib {
 	};
 }
 
-#endif
+#endif !SCENE_CLASS

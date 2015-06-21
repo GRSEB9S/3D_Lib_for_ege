@@ -1,10 +1,10 @@
 #include "../inc.h"
-#include "matrix.h"
-#include "square.h"
-#include "vector.h"
-#include "line.h"
-#include "surface.h"
+#include "../linear/matrix.h"
+#include "../linear/square.h"
+#include "../linear/vector.h"
 #include "affine.h"
+#include "line.h"
+#include "surface_plane.h"
 #include <math.h>
 #include <initializer_list>
 #include <vector>
@@ -27,7 +27,7 @@
 #undef _X
 #endif
 
-namespace X3Dlib {
+namespace Z_3D_LIB_FOR_EGE {
 
 	class _transform;
 

@@ -7,7 +7,7 @@
 #ifndef TEMPLATE_VECTOR
 #define TEMPLATE_VECTOR
 
-namespace X3Dlib {
+namespace Z_3D_LIB_FOR_EGE {
 
 	template < int d, typename T >
 	class _vector;

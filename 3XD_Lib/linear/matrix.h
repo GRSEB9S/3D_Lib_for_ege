@@ -5,7 +5,7 @@
 #ifndef TEMPLATE_MATRIX
 #define TEMPLATE_MATRIX
 
-namespace X3Dlib {
+namespace Z_3D_LIB_FOR_EGE {
 
 	template < int l, int m, typename T >
 	class _matrix;

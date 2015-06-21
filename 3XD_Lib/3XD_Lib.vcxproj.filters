@@ -5,63 +5,100 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
     <Filter Include="Resource Files">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="geometry">
+      <UniqueIdentifier>{d6484713-5c9d-4072-89a6-f02384cae41f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="scene">
+      <UniqueIdentifier>{50de208f-b65c-4979-8840-8d5cf4358b35}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="linear">
+      <UniqueIdentifier>{34936a62-0400-4147-bd38-e91197225811}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="inc">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="ext">
+      <UniqueIdentifier>{22c35e92-d5dc-4969-b7bb-bf04c4c6ffc7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="3d\camera.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="inc.h">
+      <Filter>inc</Filter>
     </ClInclude>
-    <ClInclude Include="3d\illuminate.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="geometry\line.h">
+      <Filter>geometry</Filter>
     </ClInclude>
-    <ClInclude Include="3d\plot.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="scene\camera.h">
+      <Filter>scene</Filter>
     </ClInclude>
-    <ClInclude Include="3d\scene.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="scene\illuminate.h">
+      <Filter>scene</Filter>
     </ClInclude>
-    <ClInclude Include="affine\affine.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="scene\plot.h">
+      <Filter>scene</Filter>
     </ClInclude>
-    <ClInclude Include="affine\computus.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="scene\ray.h">
+      <Filter>scene</Filter>
     </ClInclude>
-    <ClInclude Include="affine\line.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="scene\scene.h">
+      <Filter>scene</Filter>
     </ClInclude>
-    <ClInclude Include="affine\matrix.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="geometry\computus.h">
+      <Filter>geometry</Filter>
     </ClInclude>
-    <ClInclude Include="affine\square.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="geometry\transform.h">
+      <Filter>geometry</Filter>
     </ClInclude>
-    <ClInclude Include="affine\transform.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="geometry\affine.h">
+      <Filter>geometry</Filter>
     </ClInclude>
-    <ClInclude Include="affine\vector.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="linear\matrix.h">
+      <Filter>linear</Filter>
     </ClInclude>
-    <ClInclude Include="affine\surface.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="linear\square.h">
+      <Filter>linear</Filter>
+    </ClInclude>
+    <ClInclude Include="linear\vector.h">
+      <Filter>linear</Filter>
     </ClInclude>
     <ClInclude Include="3xd.h">
-      <Filter>Header Files</Filter>
+      <Filter>ext</Filter>
     </ClInclude>
-    <ClInclude Include="inc.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="geometry\Itrackable.h">
+      <Filter>geometry</Filter>
     </ClInclude>
-    <ClInclude Include="3d\ray.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="geometry\material.h">
+      <Filter>geometry</Filter>
     </ClInclude>
+    <ClInclude Include="geometry\surface_base.h">
+      <Filter>geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="geometry\surface_plane.h">
+      <Filter>geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="geometry\surface_deformation.h">
+      <Filter>geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="scene\illuminate_ambient.h">
+      <Filter>scene</Filter>
+    </ClInclude>
+    <ClInclude Include="scene\illuminate_pointolite.h">
+      <Filter>scene</Filter>
+    </ClInclude>
+    <ClInclude Include="geometry\surface_quadratic.h">
+      <Filter>geometry</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
+    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
 </Project>

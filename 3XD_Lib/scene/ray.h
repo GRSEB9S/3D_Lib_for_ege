@@ -1,13 +1,14 @@
-#include "../affine/line.h"
-#include "../affine/affine.h"
-#include "../affine/surface.h"
+#include "../inc.h"
+#include "../geometry/line.h"
+#include "../geometry/affine.h"
+#include "../geometry/surface_base.h"
 #include "illuminate.h"
 
 
-#ifndef RAY_CLASS
-#define RAY_CLASS
+#ifndef CLASS_RAY
+#define CLASS_RAY
 
-namespace X3Dlib {
+namespace Z_3D_LIB_FOR_EGE {
 	class _ray;
 
 	class _ray 
@@ -82,4 +83,4 @@ namespace X3Dlib {
 	};
 }
 
-#endif
+#endif !RAY_CLASS

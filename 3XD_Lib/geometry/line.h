@@ -4,20 +4,20 @@
 #ifndef TEMPLATE_LINE
 #define TEMPLATE_LINE
 
-namespace X3Dlib {
+namespace Z_3D_LIB_FOR_EGE {
 
 	class _line;
 
 	class _line {
 		typedef _line _Tself;
-		typedef _affine_vector _Tlv;
-		typedef _affine_vector _Tld;
+		typedef _affine_vector _Tv4;
+		typedef _affine_vector _Tdot;
 
 	public:
-		_Tld p;
-		_Tlv v;
+		_Tdot p;
+		_Tv4 v;
 
-		_Tself(const _Tld& src_p, const _Tlv& src_v) : p(src_p), v(src_v) {
+		_Tself(const _Tdot& src_p, const _Tv4& src_v) : p(src_p), v(src_v) {
 			p.normalize();
 			v.normalize();
 		}

@@ -1,7 +1,6 @@
-#include "stdafx.h"
 #include "CppUnitTest.h"
 #include "CppUnitTestAssert.h"
-#include "../3XD_Lib/affine/transform.h"
+#include "../3XD_Lib/geometry/transform.h"
 #include <math.h>
 #include <vector>
 #include <array>
@@ -9,7 +8,7 @@
 #define M_PI 3.14159265358979323846
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
-using namespace X3Dlib;
+using namespace Z_3D_LIB_FOR_EGE;
 
 namespace My3D_Lib_for_ege_UnitTest
 {

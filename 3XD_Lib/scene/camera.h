@@ -1,16 +1,16 @@
 #include "../inc.h"
-#include "../affine/matrix.h"
-#include "../affine/square.h"
-#include "../affine/vector.h"
-#include "../affine/affine.h"
-#include "../affine/line.h"
-#include "../affine/transform.h"
+#include "../linear/matrix.h"
+#include "../linear/square.h"
+#include "../linear/vector.h"
+#include "../geometry/affine.h"
+#include "../geometry/line.h"
+#include "../geometry/transform.h"
+#include "../geometry/surface_plane.h"
 
-#ifndef CAMERA_CLASS
-#define CAMERA_CLASS
+#ifndef CLASS_CAMERA
+#define CLASS_CAMERA
 
-
-namespace X3Dlib {
+namespace Z_3D_LIB_FOR_EGE {
 	class _camera;
 
 	class _camera {
@@ -166,4 +166,4 @@ namespace X3Dlib {
 	};
 }
 
-#endif
+#endif !CLASS_CAMERA

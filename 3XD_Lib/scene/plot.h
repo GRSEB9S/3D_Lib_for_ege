@@ -1,16 +1,16 @@
 #include "../inc.h"
-#include "../affine/matrix.h"
-#include "../affine/affine.h"
-#include "../affine/transform.h"
+#include "../linear/matrix.h"
+#include "../geometry/affine.h"
+#include "../geometry/transform.h"
 #include "camera.h"
 #include <array>
 #include <functional>
 #include <vector>
 
-#ifndef PLOT_CLASSES
-#define PLOT_CLASSES
+#ifndef CLASS_PLOT
+#define CLASS_PLOT
 
-namespace X3Dlib {
+namespace Z_3D_LIB_FOR_EGE {
 	class _plot;
 
 	class _plot {
@@ -134,4 +134,4 @@ namespace X3Dlib {
 	};
 }
 
-#endif
+#endif !PLOT_CLASSES
