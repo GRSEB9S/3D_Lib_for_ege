@@ -50,7 +50,7 @@ namespace Z_3D_LIB_FOR_EGE {
 			return *this;
 		}
 
-		virtual int intersect(const _Tline& ray, _Tdot* p, _Tv4* n, _Titem* t, int cRel = 1) const override {
+		virtual int intersect(const _Tline& ray, _inter* inter, int res_count = 1) const override {
 			_Titem a = _n(ray.v), b = ray.v PRO_DOT _nabla(ray.p), c = _f(ray.p);
 			_Titem _t[2] = { 0 };
 			int _v;
@@ -78,16 +78,18 @@ namespace Z_3D_LIB_FOR_EGE {
 				} else {
 					_Titem x1 = (-b + sqrt(_d)) / (2 * a), x2 = (-b - sqrt(_d)) / (2 * a);
 					_t[0] = (x1 > x2 ? x2 : x1);
-					if (cRel == 2) {
+					if (res_count > 1) {
 						_t[1] = (x1 < x2 ? x2 : x1);
 					}
 					_v = 2;
 				}
 			}
-			for (size_t i = 0; i < cRel; i++) {
-				if (p) p[i] = ray.p + ray.v * _t[i];
-				if (n) n[i] = _Tv4::normalize(_nabla(p[i]));
-				if (t) t[i] = _t[i];
+			for (size_t i = 0; i < res_count; i++) {
+				if (inter) {
+					inter[i].p = ray.p + ray.v * _t[i];
+					inter[i].n = _Tv4::normalize(_nabla(inter[i].p));
+					inter[i].t = _t[i];
+				}
 			}
 
 			return _v;

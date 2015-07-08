@@ -16,7 +16,7 @@ namespace Z_3D_LIB_FOR_EGE {
 		typedef _affine_vector		_Tv4;
 		typedef _line				_Tline;
 	public:
-		 virtual int intersect(const _Tline& ray, _Tdot* p = nullptr, _Tv4* n = nullptr, _Titem* t = nullptr, int cRel = 1) const override {
+		 virtual int intersect(const _Tline& ray, _inter* inter, int res_count = 1) const override {
 			throw "";
 		};
 	};

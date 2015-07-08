@@ -96,6 +96,12 @@
     <ClInclude Include="geometry\surface_quadratic.h">
       <Filter>geometry</Filter>
     </ClInclude>
+    <ClInclude Include="geometry\csg.h">
+      <Filter>geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="geometry\Idetectable.h">
+      <Filter>geometry</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

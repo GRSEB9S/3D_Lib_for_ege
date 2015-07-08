@@ -80,6 +80,8 @@
   <ItemGroup>
     <ClInclude Include="3xd.h" />
     <ClInclude Include="geometry\affine.h" />
+    <ClInclude Include="geometry\csg.h" />
+    <ClInclude Include="geometry\Idetectable.h" />
     <ClInclude Include="geometry\surface_base.h" />
     <ClInclude Include="geometry\computus.h" />
     <ClInclude Include="geometry\Itrackable.h" />

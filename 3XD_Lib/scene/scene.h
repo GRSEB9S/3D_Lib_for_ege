@@ -32,6 +32,7 @@ namespace Z_3D_LIB_FOR_EGE {
 		typedef _illuminate		_Till;
 		typedef _material		_Tmaterial;
 		typedef _base_surface	_Tsur;
+		typedef _inter			_Tit;
 
 	public:
 		std::vector< const _Tsur* > surfaces;
@@ -100,18 +101,17 @@ namespace Z_3D_LIB_FOR_EGE {
 			bool is_intersec = false;
 			_Titem len = DBL_MAX;
 			for (const _Tsur* pl : surfaces) {
-				_Tdot _p;
-				_Titem _t;
-				pl->intersect(_ray, &_p, nullptr, &_t);
+				_Tit _it;
+				pl->intersect(_ray, &_it);
 				/*
 				_Tdot _p = pl->p(_ray);
 				_Titem _t = pl->t(_ray);
 				*/
 				// have intersections
-				if (_p != _Tdot() && _t > 0) {
+				if (_it.p != _Tdot() && _it.t > 0) {
 					is_intersec = true;
-					if (_t < len) {
-						len = _t;
+					if (_it.t < len) {
+						len = _it.t ;
 						s = pl;
 					}
 				}
@@ -122,43 +122,43 @@ namespace Z_3D_LIB_FOR_EGE {
 				_Tdot _p = s->p(_ray);
 				_Tv4 _n = s->n(_p);
 				*/
-				_Tdot _p;
-				_Tv4 _n;
-				s->intersect(_ray, &_p, &_n, nullptr, 1);
+				_Tit it;
+				s->intersect(_ray, &it, 1);
 				I = _Till::ambient(ambient.i(), *s);
 
 				for (const _Tpl& pt : pointolits) {
 
 					_Till _i = pt.i();
-					_Tv4 _l = pt.l() - _p;
-					_Tv4 _v = _ray.p - _p;
+					_Tv4 _l = pt.l() - it.p;
+					_Tv4 _v = _ray.p - it.p;
 
 					_Tline _r(pt.l(), _l * -1);
 					// in shadow
 					bool in_shadow = false;
 					for (const _Tsur* pl : surfaces) {
-						_Titem _t, _ts;
-						pl->intersect(_r, nullptr, nullptr, &_ts, 1);
-						s->intersect(_r, nullptr, nullptr, &_t, 1);
+						_Tit _pit;
+						_Tit _sit;
+						pl->intersect(_r, &_pit, 1);
+						s->intersect(_r, &_sit, 1);
 						/*
 						_Titem _ts = pl->t(_r);
 						_Titem _t = s->t(_r);
 						*/
-						if (_ts != DBL_MAX && _t != DBL_MAX && _ts > 0 && _ts < _t) {
+						if (_pit.t != DBL_MAX && _sit.t != DBL_MAX && _pit.t > 0 && _pit.t < _sit.t) {
 							in_shadow = true;
 						}
 					}
 
 					if (!in_shadow) {
 						// add diffuse lights
-						I += _Till::diffuse(_i, *s, _n, _l);
+						I += _Till::diffuse(_i, *s, it.n, _l);
 						// add hightlight lights
-						I += _Till::highlights(_i, *s, _n, _l, _v);
+						I += _Till::highlights(_i, *s, it.n, _l, _v);
 					}
 				}
 
 				// calculations secondary light rays with reflection
-				I += _ray_tracing(_ray.reflex(_p, _n), _recursive, _count) * s->ks;
+				I += _ray_tracing(_ray.reflex(it.p, it.n), _recursive, _count) * s->ks;
 				// calculations secondary light rays with refraction
 				/*
 				if (!_ray.full_reflex(*s, 1))

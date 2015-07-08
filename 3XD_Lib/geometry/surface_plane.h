@@ -51,11 +51,13 @@ namespace Z_3D_LIB_FOR_EGE {
 			return *this;
 		}
 
-		virtual int intersect(const _Tline& ray, _Tdot* p = nullptr, _Tv4* n = nullptr, _Titem* t = nullptr, int cRel = 1) const override {
+		virtual int intersect(const _Tline& ray, _inter* inter, int res_count = 1) const override {
 			if (DOUBLE_EQ(_n PRO_DOT ray.v, 0.0)) return 0;
-			if (p) p[0] = ray.p + ray.v * ((_n PRO_DOT(_p - ray.p)) / (_n PRO_DOT ray.v));
-			if (n) n[0] = _n;
-			if (t) t[0] = (ray.p - p[0]).mod();
+			if (inter) {
+				inter[0].p = ray.p + ray.v * ((_n PRO_DOT(_p - ray.p)) / (_n PRO_DOT ray.v));
+				inter[0].n = _n;
+				inter[0].t = (ray.p - inter[0].p).mod();
+			}
 			return 1;
 		}
 
